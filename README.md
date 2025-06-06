@@ -1,26 +1,6 @@
 # Explanatory Video Generator
 
-## Overview
-
-This project is a tool that automatically generates explanatory videos from a given prompt. It leverages the following technologies:
-
-* **Pydantic AI:** Used to create intelligent agents that process the prompt and generate the video script.
-* **Gemini:** The LLM that powers the agent, understanding the prompt and generating creative content.
-* **Manim:** A powerful animation engine for creating mathematical and explanatory videos.
-* **MoviePy:** A library for video editing, used here to combine the Manim-generated scenes into a final video.
-
-In essence, you provide a prompt, and the system uses AI to create a video explaining the topic described in the prompt.
-
-## Features
-
-* Automatic video generation from a text prompt.
-* Uses Gemini for prompt understanding and content creation.
-* Leverages Manim for high-quality animations.
-* Combines animations into a complete video using MoviePy.
-
 ## Setup Instructions
-
-Here's how to get the video generator up and running:
 
 1.  **Clone the Repository:**
     ```bash
