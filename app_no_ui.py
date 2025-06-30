@@ -7,7 +7,7 @@ from typing import List
 import logging
 
 from moviepy import concatenate_videoclips, VideoFileClip
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pydantic_ai import Agent, RunContext
 from dotenv import load_dotenv
 from pydantic_ai.models.openai import OpenAIModel
@@ -32,13 +32,15 @@ openai_llm = OpenAIModel(
 
 class ChapterDescription(BaseModel):
     """Describes a chapter in the video."""
-    title: str = Field(description="Title of the chapter.")
+    title: str = Field(description="Title of the chapter.", alias="name")
     explanation: str = Field(description="Detailed explanation of the chapter's content, including how Manim should visualize it. Be very specific with Manim instructions, including animations, shapes, positions, colors, and timing. Include LaTeX for mathematical formulas. Specify scene transitions. Example: 'Create a number line. Animate a point moving along the number line to illustrate addition. Use Transform to show the equation changing. Transition to a new Scene.'")
+    model_config = ConfigDict(populate_by_name=True)
 
 class VideoOutline(BaseModel):
     """Describes the outline of the video."""
-    title: str = Field(description="Title of the entire video.")
+    title: str = Field(description="Title of the entire video.", alias="name")
     chapters: List[ChapterDescription] = Field(description="List of chapters in the video.")
+    model_config = ConfigDict(populate_by_name=True)
 
 class ManimCode(BaseModel):
     """Describes the Manim code for a chapter."""
