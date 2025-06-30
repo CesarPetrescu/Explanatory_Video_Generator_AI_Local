@@ -9,18 +9,24 @@ import logging
 from moviepy import concatenate_videoclips, VideoFileClip
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent, RunContext
-from pydantic_ai.models.gemini import GeminiModel
-from pydantic_ai.providers.google_gla import GoogleGLAProvider
-from config import api_key
+from dotenv import load_dotenv
+from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.providers.openai import OpenAIProvider
+
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+api_base = os.getenv("OPENAI_API_BASE")
+api_model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 import nest_asyncio
 nest_asyncio.apply()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Configure your Gemini API key
-gemini_llm = GeminiModel(
-    'gemini-2.0-flash', provider=GoogleGLAProvider(api_key=api_key)
+# Configure OpenAI API
+openai_llm = OpenAIModel(
+    api_model,
+    provider=OpenAIProvider(base_url=api_base, api_key=api_key),
 )
 
 
@@ -39,7 +45,7 @@ class ManimCode(BaseModel):
     code: str = Field(description="Complete Manim code for the chapter. Include all necessary imports. The code should create a single scene. Add comments to explain the code. Do not include any comments that are not valid Python comments. Ensure the code is runnable.")
 
 outline_agent = Agent(
-    model=gemini_llm,
+    model=openai_llm,
     result_type=VideoOutline,
     system_prompt="""
     You are a video script writer. Your job is to create a clear and concise outline for an educational video explaining a concept.
@@ -51,7 +57,7 @@ outline_agent = Agent(
 )
 
 manim_agent = Agent(
-    model=gemini_llm,
+    model=openai_llm,
     result_type=ManimCode,
     system_prompt="""
     You are a Manim code generator. Your job is to create Manim code for a single chapter of a video, given a detailed explanation of the chapter's content and how it should be visualized.
@@ -62,7 +68,7 @@ manim_agent = Agent(
 )
 
 code_fixer_agent = Agent(
-    model=gemini_llm,
+    model=openai_llm,
     result_type=ManimCode,
     system_prompt="""
     You are a Manim code debugging expert. You will receive Manim code that failed to execute and the error message.

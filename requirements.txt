@@ -4,3 +4,5 @@ moviepy
 pydantic
 nest_asyncio
 streamlit
+openai
+python-dotenv
