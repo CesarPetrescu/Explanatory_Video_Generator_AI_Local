@@ -11,11 +11,13 @@
 
 2.  **Configure the API Key:**
 
-    * Create a copy of the `config-example.py` file and rename it to `config.py`.
-    * Open `config.py` and add your Gemini API key:
+    * Copy `.env.example` to `.env`.
+    * Edit `.env` and set your OpenAI-compatible API base, key, and model:
 
-        ```python
-        api_key='<google-gemini-api-key>'"  # Replace with your actual Gemini API key
+        ```bash
+        OPENAI_API_BASE=https://api.openai.com/v1
+        OPENAI_API_KEY=<your-api-key>
+        OPENAI_MODEL=gpt-3.5-turbo
         ```
 
 3.  **Install Dependencies:**
